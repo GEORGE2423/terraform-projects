@@ -17,7 +17,7 @@ module "compute" {
   public_subnet  = module.networking.public_subnet
   elb            = module.loadbalancing.elb
   alb_tg         = module.loadbalancing.alb_tg
-  key_name       = "MyEC2PracticeKey"
+  key_name       = "april08a"
 }
 
 module "loadbalancing" {
