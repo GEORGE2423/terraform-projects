@@ -6,4 +6,5 @@ variable "aws_region" {
 
 variable "access_ip" {
   type = string
+  default  = "0.0.0.0/0"
 }
