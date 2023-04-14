@@ -1,5 +1,5 @@
 variable "name" {
-  default     = "Liontech-dev"
+  default     = "Liontech-prod"
   type        = string
   description = "Name of the VPC"
 }
@@ -12,7 +12,7 @@ variable "project" {
 
 variable "environment" {
   type        = string
-  default     =  "dev"
+  default     =  "production"
   description = "Name of environment this VPC is targeting"
 }
 
