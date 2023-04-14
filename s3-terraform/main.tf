@@ -10,45 +10,45 @@ terraform {
 }
 
 provider "aws" {
-  profile = "default"
+  profile = "dev"
   region  = var.aws_region
 }
 
 ###########################
 # Customer managed KMS key
 ###########################
-resource "aws_kms_key" "kms_s3_key" {
+resource "aws_kms_key" "dev" {
   description             = "Key to protect S3 objects"
   key_usage               = "ENCRYPT_DECRYPT"
   deletion_window_in_days = 7
   is_enabled              = true
 }
 
-resource "aws_kms_alias" "kms_s3_key_alias" {
+resource "aws_kms_alias" "dev_alias" {
   name          = "alias/s3-key"
-  target_key_id = aws_kms_key.kms_s3_key.key_id
+  target_key_id = aws_kms_key.dev.key_id
 }
 
 ########################
 # Bucket creation
 ########################
-resource "aws_s3_bucket" "my_protected_bucket" {
+resource "aws_s3_bucket" "liontech-april14-demo" {
   bucket = var.bucket_name
 }
 
 ##########################
 # Bucket private access
 ##########################
-resource "aws_s3_bucket_acl" "my_protected_bucket_acl" {
-  bucket = aws_s3_bucket.my_protected_bucket.id
+resource "aws_s3_bucket_acl" "liontech-april14-demo_acl" {
+  bucket = aws_s3_bucket.liontech-april14-demo.id
   acl    = "private"
 }
 
 #############################
 # Enable bucket versioning
 #############################
-resource "aws_s3_bucket_versioning" "my_protected_bucket_versioning" {
-  bucket = aws_s3_bucket.my_protected_bucket.id
+resource "aws_s3_bucket_versioning" "liontech-april14-demo_versioning" {
+  bucket = aws_s3_bucket.liontech-april14-demo.id
   versioning_configuration {
     status = "Enabled"
   }
@@ -57,12 +57,12 @@ resource "aws_s3_bucket_versioning" "my_protected_bucket_versioning" {
 ##########################################
 # Enable default Server Side Encryption
 ##########################################
-resource "aws_s3_bucket_server_side_encryption_configuration" "my_protected_bucket_server_side_encryption" {
-  bucket = aws_s3_bucket.my_protected_bucket.bucket
+resource "aws_s3_bucket_server_side_encryption_configuration" "liontech-april14-demo_server_side_encryption" {
+  bucket = aws_s3_bucket.liontech-april14-demo.bucket
 
   rule {
     apply_server_side_encryption_by_default {
-      kms_master_key_id = aws_kms_key.kms_s3_key.arn
+      kms_master_key_id = aws_kms_key.dev.arn
       sse_algorithm     = "aws:kms"
     }
   }
@@ -71,11 +71,11 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "my_protected_buck
 ############################
 # Creating Lifecycle Rule
 ############################
-resource "aws_s3_bucket_lifecycle_configuration" "my_protected_bucket_lifecycle_rule" {
+resource "aws_s3_bucket_lifecycle_configuration" "liontech-april14-demo_lifecycle_rule" {
   # Must have bucket versioning enabled first
-  depends_on = [aws_s3_bucket_versioning.my_protected_bucket_versioning]
+  depends_on = [aws_s3_bucket_versioning.liontech-april14-demo_versioning]
 
-  bucket = aws_s3_bucket.my_protected_bucket.bucket
+  bucket = aws_s3_bucket.liontech-april14-demo.bucket
 
   rule {
     id     = "basic_config"
@@ -105,8 +105,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "my_protected_bucket_lifecycle_
 # Disabling bucket
 # public access
 ########################
-resource "aws_s3_bucket_public_access_block" "my_protected_bucket_access" {
-  bucket = aws_s3_bucket.my_protected_bucket.id
+resource "aws_s3_bucket_public_access_block" "liontech-april14-demo_access" {
+  bucket = aws_s3_bucket.liontech-april14-demo.id
 
   # Block public access
   block_public_acls       = false
