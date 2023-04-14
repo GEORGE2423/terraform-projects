@@ -11,7 +11,7 @@ resource "aws_vpc" "my_vpc" {
   enable_dns_support   = true
 
   tags = {
-    Name = "my_2tier_vpc-${random_integer.random.id}"
+    Name = "liontech-dev-${random_integer.random.id}"
   }
 }
 resource "aws_subnet" "my_public_subnet" {
@@ -22,7 +22,7 @@ resource "aws_subnet" "my_public_subnet" {
   availability_zone       = ["us-east-1a", "us-east-1b", "us-east-1c", "us-east-1d", "us-east-1e", "us-east-1f"][count.index]
 
   tags = {
-    Name = "2tier_public_${count.index + 1}"
+    Name = "liontech-dev-pub_${count.index + 1}"
   }
 }
 resource "aws_route_table_association" "my_public_assoc" {
@@ -38,7 +38,7 @@ resource "aws_subnet" "my_private_subnet" {
   availability_zone = ["us-east-1a", "us-east-1b", "us-east-1c", "us-east-1d", "us-east-1e", "us-east-1f"][count.index]
 
   tags = {
-    Name = "2tier_private_${count.index + 1}"
+    Name = "liontech-dev_${count.index + 1}"
   }
 }
 
@@ -72,7 +72,7 @@ resource "aws_route_table" "my_public_rt" {
   vpc_id = aws_vpc.my_vpc.id
 
   tags = {
-    Name = "2tier_public"
+    Name = "liontech-dev-pub"
   }
 }
 
@@ -86,7 +86,7 @@ resource "aws_route_table" "my_private_rt" {
   vpc_id = aws_vpc.my_vpc.id
 
   tags = {
-    Name = "2tier_private"
+    Name = "liontech-dev"
   }
 }
 
@@ -100,7 +100,7 @@ resource "aws_default_route_table" "my_private_rt" {
   default_route_table_id = aws_vpc.my_vpc.default_route_table_id
 
   tags = {
-    Name = "project_private"
+    Name = "liontech-dev"
   }
 }
 

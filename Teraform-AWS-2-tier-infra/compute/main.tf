@@ -24,7 +24,8 @@ resource "aws_launch_template" "my_bastion" {
   key_name               = var.key_name
 
   tags = {
-    Name = "2tier_bastion"
+    Name = "liontech-dev-baston"
+    Team = "devops"
   }
 }
 
@@ -48,9 +49,10 @@ resource "aws_launch_template" "my_database" {
   vpc_security_group_ids = [var.private_sg]
   key_name               = var.key_name
   user_data              = filebase64("install_apache.sh")
+  #user_data              = filebase64("install_jenkins.sh")
 
   tags = {
-    Name = "2tier_database"
+    Name = "liontech-daming-db"
   }
 }
 
